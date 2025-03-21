@@ -1,6 +1,10 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+if (!ctx) {
+    console.error("Errore: impossibile ottenere il contesto 2D del canvas!");
+}
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -19,7 +23,7 @@ function gameLoop() {
         showGameOver();
         return;
     }
-    
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     player.update();
@@ -35,10 +39,10 @@ function gameLoop() {
         invader.update();
         invader.draw();
     });
-    
+
     checkCollisions();
     drawScore();
-    
+
     if (invaders.length === 0) {
         levelUp();
     }
@@ -55,17 +59,13 @@ function checkCollisions() {
                 bullet.y < invader.y + invader.height &&
                 bullet.y + bullet.height > invader.y
             ) {
-                // Rimuovi il proiettile e l'invasore
                 bullets.splice(bulletIndex, 1);
                 invaders.splice(invaderIndex, 1);
-                
-                // Aumenta il punteggio
                 score += 10;
             }
         });
     });
-    
-    // Controlla se un invasore ha raggiunto il giocatore
+
     invaders.forEach((invader) => {
         if (
             invader.y + invader.height > player.y &&
@@ -85,8 +85,7 @@ function showGameOver() {
     ctx.fillText("Punteggio: " + score, canvas.width / 2, canvas.height / 2 + 40);
     ctx.font = "20px Arial";
     ctx.fillText("Tocca per ricominciare", canvas.width / 2, canvas.height / 2 + 80);
-    
-    // Ricomincia il gioco al tocco
+
     document.addEventListener("touchstart", restart, { once: true });
     document.addEventListener("keydown", restart, { once: true });
 }
@@ -102,7 +101,6 @@ function restart() {
 function drawScore() {
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.textAlign = "left";
     ctx.fillText("Punteggio: " + score, 10, 20);
 }
 
@@ -111,3 +109,4 @@ function levelUp() {
 }
 
 init();
+

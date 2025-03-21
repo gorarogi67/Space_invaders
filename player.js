@@ -8,14 +8,12 @@ class Player {
         this.movingLeft = false;
         this.movingRight = false;
 
-        // Controlli touch
         document.addEventListener("touchmove", (e) => {
             this.x = e.touches[0].clientX - this.width / 2;
         });
 
         document.addEventListener("touchstart", () => this.shoot());
-        
-        // Controlli da tastiera
+
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowLeft") this.movingLeft = true;
             if (e.key === "ArrowRight") this.movingRight = true;
@@ -40,8 +38,8 @@ class Player {
     update() {
         if (this.movingLeft) this.x -= this.speed;
         if (this.movingRight) this.x += this.speed;
-        
-        if (this.x < 0) this.x = 0;
-        if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
+
+        this.x = Math.max(0, Math.min(canvas.width - this.width, this.x));
     }
 }
+
